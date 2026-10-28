@@ -1,0 +1,946 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Ranní lineárka — denní trenažér lineární algebry k předmětu NMAG111 na MFF UK: otázky jako u zkoušky, opakování v intervalech a odkazy do skript.">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<script src="local-db.js"></script>
+<title>Ranní lineárka</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&display=swap">
+<style>
+/* Layout: one narrow column like an exam sheet; questions sit on squared notebook paper with a red margin line. */
+:root {
+  --paper: #f3f5f9;
+  --card: #ffffff;
+  --ink: #141c33;
+  --muted: #5a6379;
+  --line: #d9dee9;
+  --grid: rgba(35, 67, 168, 0.075);
+  --margin: #e9a49d;
+  --accent: #2343a8;
+  --accent-ink: #ffffff;
+  --accent-soft: #e4e9fa;
+  --ok: #1d7a4c;
+  --ok-soft: #e0f2e8;
+  --part: #9a6300;
+  --part-soft: #fbefd6;
+  --bad: #c2352a;
+  --bad-soft: #fbe5e2;
+  --f-display: "Literata", "Georgia", "Times New Roman", serif;
+  --f-ui: "Golos Text", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --r: 10px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #10141c; --card: #171c27; --ink: #e7ebf3; --muted: #98a1b4; --line: #283041;
+    --grid: rgba(150, 172, 230, 0.06); --margin: #5d3036; --accent: #93aaff; --accent-ink: #0f1424;
+    --accent-soft: #1d2645; --ok: #6fd3a0; --ok-soft: #15302a; --part: #f0c062; --part-soft: #352a14;
+    --bad: #ff8b80; --bad-soft: #3a1f22; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #10141c; --card: #171c27; --ink: #e7ebf3; --muted: #98a1b4; --line: #283041;
+  --grid: rgba(150, 172, 230, 0.06); --margin: #5d3036; --accent: #93aaff; --accent-ink: #0f1424;
+  --accent-soft: #1d2645; --ok: #6fd3a0; --ok-soft: #15302a; --part: #f0c062; --part-soft: #352a14;
+  --bad: #ff8b80; --bad-soft: #3a1f22; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--paper); color: var(--ink); font-family: var(--f-ui); font-size: 15px; line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
+button, input, textarea, select { font: inherit; color: inherit; }
+a { color: var(--accent); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+
+.wrap { max-width: 760px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+/* header */
+header.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--paper); border-bottom: 1px solid var(--line); }
+header.top .wrap { display: flex; align-items: center; gap: 12px; padding-block: 10px; flex-wrap: wrap; }
+.brand { display: flex; align-items: baseline; gap: 10px; margin-right: auto; min-width: 0; }
+.brand b { font-family: var(--f-display); font-weight: 600; font-size: 1.15rem; letter-spacing: -0.01em; white-space: nowrap; }
+.brand span { font-family: var(--f-mono); font-size: 0.72rem; color: var(--muted); letter-spacing: 0.04em; white-space: nowrap; }
+nav.tabs { display: flex; gap: 2px; background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 3px; }
+nav.tabs button { border: 0; background: transparent; padding: 5px 12px; border-radius: 999px; cursor: pointer; font-size: 0.86rem; color: var(--muted); }
+nav.tabs button[aria-current="page"] { background: var(--accent); color: var(--accent-ink); }
+
+main.wrap { padding-block: 20px 64px; display: grid; gap: 18px; }
+
+/* shared bits */
+.eyebrow { font-family: var(--f-mono); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+h1, h2, h3 { text-wrap: balance; margin: 0; }
+h1 { font-family: var(--f-display); font-weight: 600; font-size: clamp(1.5rem, 4.6vw, 2rem); line-height: 1.15; letter-spacing: -0.015em; }
+h2 { font-family: var(--f-display); font-weight: 600; font-size: 1.2rem; }
+h3 { font-size: 0.95rem; font-weight: 600; }
+p { margin: 0; }
+.muted { color: var(--muted); }
+.mono { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+.panel { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 16px; display: grid; gap: 12px; min-width: 0; }
+.row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.stack { display: grid; gap: 10px; min-width: 0; }
+.btn { border: 1px solid var(--line); background: var(--card); padding: 9px 14px; border-radius: 8px; cursor: pointer; font-weight: 500; font-size: 0.92rem; display: inline-flex; align-items: center; gap: 6px; text-decoration: none; color: var(--ink); }
+.btn:hover { border-color: var(--accent); }
+.btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.btn.big { padding: 12px 20px; font-size: 1rem; font-weight: 600; }
+.btn.ghost { background: transparent; }
+.btn.ok { background: var(--ok-soft); color: var(--ok); border-color: transparent; }
+.btn.part { background: var(--part-soft); color: var(--part); border-color: transparent; }
+.btn.bad { background: var(--bad-soft); color: var(--bad); border-color: transparent; }
+.btn[disabled] { opacity: 0.5; cursor: default; }
+.chip { display: inline-flex; align-items: center; gap: 5px; font-size: 0.78rem; padding: 2px 9px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); white-space: nowrap; }
+.chip.plain { background: transparent; border: 1px solid var(--line); color: var(--muted); }
+.chip.sec { font-family: var(--f-mono); background: transparent; border: 1px solid var(--line); color: var(--ink); }
+.notice { border: 1px dashed var(--line); border-radius: var(--r); padding: 14px 16px; color: var(--muted); }
+
+/* today */
+.today-hero { display: grid; gap: 14px; }
+.plan-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 620px) { .split { grid-template-columns: 1fr; } }
+.countdown { display: flex; align-items: baseline; gap: 8px; }
+.countdown .n { font-family: var(--f-display); font-size: 2.2rem; font-weight: 600; line-height: 1; font-variant-numeric: tabular-nums; }
+.reread { display: grid; gap: 8px; }
+.reread-item { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center; padding: 8px 0; border-top: 1px solid var(--line); }
+.reread-item:first-child { border-top: 0; }
+.reread-item .t { min-width: 0; }
+.modes { display: flex; flex-wrap: wrap; gap: 8px; }
+
+/* sheet (question) */
+.sheet {
+  background-color: var(--card);
+  background-image:
+    linear-gradient(to right, transparent 34px, var(--margin) 34px, var(--margin) 35.5px, transparent 35.5px),
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 100% 100%, 20px 20px, 20px 20px;
+  border: 1px solid var(--line); border-radius: var(--r);
+  padding: 18px 18px 20px 52px; display: grid; gap: 16px; min-width: 0;
+}
+@media (max-width: 480px) { .sheet { padding-left: 46px; padding-right: 14px; } .sheet { background-image: linear-gradient(to right, transparent 30px, var(--margin) 30px, var(--margin) 31.5px, transparent 31.5px), linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px); } }
+.qmeta { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.qtext { font-family: var(--f-display); font-size: 1.14rem; line-height: 1.6; min-width: 0; overflow-wrap: anywhere; }
+.qtext p + p { margin-top: 0.6em; }
+.prose { min-width: 0; overflow-wrap: anywhere; }
+.prose p + p, .prose ul, .prose ol, .prose p + ul, .prose ul + p, .prose ol + p { margin-top: 0.5em; }
+.prose ul, .prose ol { padding-left: 1.3em; margin-bottom: 0; }
+.prose li + li { margin-top: 0.2em; }
+.qtext ul, .qtext ol { padding-left: 1.3em; margin: 0.4em 0 0; }
+mjx-container { max-width: 100%; }
+mjx-container[display="true"] { overflow-x: auto; overflow-y: hidden; padding: 2px 0; }
+
+.progress { display: flex; align-items: center; gap: 10px; }
+.progress .bar { flex: 1; height: 6px; border-radius: 99px; background: var(--line); overflow: hidden; }
+.progress .bar i { display: block; height: 100%; background: var(--accent); border-radius: 99px; transition: width .3s; }
+.choices { display: grid; gap: 8px; }
+.choice { text-align: left; border: 1px solid var(--line); background: var(--card); border-radius: 8px; padding: 11px 14px; cursor: pointer; display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: baseline; }
+.choice .k { font-family: var(--f-mono); color: var(--muted); }
+.choice:hover:not([disabled]) { border-color: var(--accent); }
+.choice.is-ok { border-color: var(--ok); background: var(--ok-soft); }
+.choice.is-bad { border-color: var(--bad); background: var(--bad-soft); }
+.yn { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.yn .btn { justify-content: center; padding: 14px; font-size: 1.05rem; }
+.yn .btn.is-ok { background: var(--ok-soft); color: var(--ok); border-color: var(--ok); }
+.yn .btn.is-bad { background: var(--bad-soft); color: var(--bad); border-color: var(--bad); }
+textarea, input[type="text"] { width: 100%; border: 1px solid var(--line); background: var(--card); border-radius: 8px; padding: 10px 12px; font-size: 16px; line-height: 1.5; }
+textarea { min-height: 120px; resize: vertical; font-family: var(--f-mono); font-size: 15px; }
+textarea:focus, input[type="text"]:focus { outline: 2px solid var(--accent); outline-offset: 0; border-color: transparent; }
+.preview { border-left: 3px solid var(--accent-soft); padding-left: 12px; }
+.hint { background: var(--accent-soft); border-radius: 8px; padding: 10px 12px; font-size: 0.93rem; }
+.photo-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.photo-row img { max-height: 120px; border-radius: 6px; border: 1px solid var(--line); }
+.filelbl { position: relative; overflow: hidden; }
+.filelbl input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+
+.feedback { border-radius: var(--r); padding: 14px 16px; display: grid; gap: 10px; border: 1px solid var(--line); background: var(--card); min-width: 0; }
+.feedback.g2 { border-color: var(--ok); }
+.feedback.g1 { border-color: var(--part); }
+.feedback.g0 { border-color: var(--bad); }
+.verdict { font-weight: 700; font-size: 1.02rem; }
+.g2 .verdict { color: var(--ok); } .g1 .verdict { color: var(--part); } .g0 .verdict { color: var(--bad); }
+.model { border-top: 1px dashed var(--line); padding-top: 10px; }
+.model .lbl { margin-bottom: 4px; }
+.ref { display: flex; gap: 10px; align-items: flex-start; background: var(--bad-soft); color: var(--ink); border-radius: 8px; padding: 10px 12px; text-decoration: none; }
+.ref.calm { background: var(--accent-soft); }
+.ref .sec { font-family: var(--f-mono); font-weight: 600; color: var(--bad); white-space: nowrap; }
+.ref.calm .sec { color: var(--accent); }
+.checklist { display: grid; gap: 6px; }
+.checklist label { display: grid; grid-template-columns: auto 1fr; gap: 8px; align-items: start; cursor: pointer; }
+.checklist input { margin-top: 4px; accent-color: var(--accent); }
+.ai { background: var(--paper); border-radius: 8px; padding: 12px; display: grid; gap: 6px; }
+.ai ul { margin: 0; padding-left: 1.2em; }
+.gradebar { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.gradebar .btn { justify-content: center; }
+.gradebar .btn.sel { outline: 2px solid currentColor; outline-offset: 1px; }
+.nav-row { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+
+/* stats */
+.kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.kpi { background: var(--card); border: 1px solid var(--line); border-radius: var(--r); padding: 12px 14px; }
+.kpi .v { font-family: var(--f-display); font-size: 1.6rem; font-weight: 600; font-variant-numeric: tabular-nums; line-height: 1.1; }
+@media (max-width: 480px) { .kpi .v { font-size: 1.3rem; } }
+.days { display: grid; grid-template-columns: repeat(28, 1fr); gap: 3px; }
+.days i { aspect-ratio: 1; border-radius: 3px; background: var(--line); max-width: 100%; }
+.days i.d1 { background: var(--accent-soft); outline: 1px solid var(--accent); outline-offset: -1px; }
+.days i.d2 { background: var(--accent); }
+.chap { display: grid; gap: 4px; }
+.chap-head { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; padding-top: 10px; border-top: 1px solid var(--line); }
+.chap:first-child .chap-head { border-top: 0; padding-top: 0; }
+.secrow { display: grid; grid-template-columns: 62px minmax(0, 1fr) 100px 64px; gap: 10px; align-items: center; padding: 5px 0; font-size: 0.9rem; }
+.secrow > .mono.muted { white-space: nowrap; text-align: right; }
+.secrow > .tr, .secrow > span:last-child { justify-self: end; }
+.secrow .meter { height: 8px; background: var(--line); border-radius: 99px; overflow: hidden; display: flex; }
+.secrow .meter .m { background: var(--ok); }
+.secrow .meter .l { background: var(--part); opacity: 0.7; }
+.secrow .tr { border: 0; background: none; color: var(--accent); cursor: pointer; padding: 2px 4px; font-size: 0.85rem; }
+@media (max-width: 480px) { .secrow { grid-template-columns: 46px minmax(0, 1fr) 92px 58px; gap: 8px; } }
+.legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 0.8rem; color: var(--muted); }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+
+/* bank */
+.filters { display: grid; gap: 8px; }
+.seg { display: flex; flex-wrap: wrap; gap: 6px; }
+.seg button { border: 1px solid var(--line); background: var(--card); border-radius: 999px; padding: 4px 11px; font-size: 0.84rem; cursor: pointer; color: var(--muted); }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.qitem { border-top: 1px solid var(--line); padding: 10px 0; display: grid; gap: 8px; }
+.qitem summary { cursor: pointer; display: grid; grid-template-columns: 10px 1fr; gap: 10px; align-items: baseline; list-style: none; }
+.qitem summary::-webkit-details-marker { display: none; }
+.dot { width: 9px; height: 9px; border-radius: 50%; background: var(--line); display: inline-block; }
+.dot.b1 { background: var(--bad); } .dot.b2 { background: var(--part); } .dot.b3 { background: var(--ok); opacity: .6 } .dot.b4 { background: var(--ok); }
+.qitem .body { padding-left: 20px; display: grid; gap: 8px; }
+
+.done-card { text-align: left; }
+.tally { display: flex; gap: 14px; flex-wrap: wrap; }
+.tally span b { font-family: var(--f-display); font-size: 1.4rem; margin-right: 4px; }
+.spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid var(--line); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; vertical-align: -2px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .spinner { animation: none; } .progress .bar i { transition: none; } }
+.toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); background: var(--ink); color: var(--paper); padding: 9px 16px; border-radius: 8px; font-size: 0.9rem; z-index: 20; max-width: calc(100% - 32px); }
+
+.webnote { border-bottom: 1px solid var(--line); background: var(--accent-soft); color: var(--ink); font-size: 0.86rem; }
+.webnote .wrap { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: baseline; justify-content: space-between; padding-block: 8px; }
+.webnote a { font-weight: 600; text-decoration: none; }
+.webnote a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand"><b>Ranní lineárka</b><span id="hdr-date">NMAG111</span></div>
+    <nav class="tabs" aria-label="Sekce">
+      <button data-view="today" aria-current="page">Dnes</button>
+      <button data-view="stats">Pokrok</button>
+      <button data-view="bank">Otázky</button>
+    </nav>
+  </div>
+</header>
+<div class="webnote"><div class="wrap">
+  <span>Webová verze: pokrok se ukládá jen v tomto prohlížeči. Otázky jsou k předmětu NMAG111 (MFF UK, ZS 2026/27).</span>
+  <a href="../">← Yurii Tsipino</a>
+</div></div>
+<main class="wrap" id="view">
+  <section class="panel">
+    <span class="eyebrow">Lineární algebra 1 · NMAG111</span>
+    <h1>Denní opakování ke zkoušce</h1>
+    <p class="muted">Načítám otázky a tvůj pokrok…</p>
+  </section>
+</main>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+window.MathJax = {
+  tex: { inlineMath: [["$", "$"], ["\\(", "\\)"]], displayMath: [["$$", "$$"], ["\\[", "\\]"]], processEscapes: true },
+  svg: { fontCache: "global" },
+  options: { enableMenu: false },
+  startup: {
+    typeset: false,
+    ready() {
+      MathJax.startup.defaultReady();
+      MathJax.startup.promise.then(() => { window.__mjReady = true; (window.__mjQueue || []).forEach(el => typesetNow(el)); window.__mjQueue = []; });
+    }
+  }
+};
+function typesetNow(el) { try { MathJax.typesetClear && MathJax.typesetClear([el]); MathJax.typesetPromise([el]).catch(() => {}); } catch (e) {} }
+function typeset(el) { if (!el) return; if (window.__mjReady) typesetNow(el); else (window.__mjQueue = window.__mjQueue || []).push(el); }
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.js" async></script>
+<script>
+"use strict";
+/* ---------------- constants ---------------- */
+const SKRIPTA = "https://www.mff.cuni.cz/data/web/obsah/department_math/ka/skripta_la7.pdf";
+const COURSE = "https://www2.karlin.mff.cuni.cz/~stovicek/index.php/cs/2627zs-nmag111";
+const TZ = "Europe/Prague";
+const TYPES = {
+  yn:    { label: "Ano / Ne", pts: 2, min: 0.5, light: true },
+  mc:    { label: "Výběr z možností", pts: 2, min: 1, light: true },
+  short: { label: "Krátká úloha", pts: 3, min: 2, light: true },
+  def:   { label: "Definice", pts: 3, min: 2.5, light: true, written: true },
+  thm:   { label: "Formulace tvrzení", pts: 3, min: 2.5, light: true, written: true },
+  calc:  { label: "Výpočet s postupem", pts: 5, min: 6, heavy: true, written: true },
+  proof: { label: "Důkaz", pts: 5, min: 7, heavy: true, written: true },
+  think: { label: "Na zamyšlení", pts: 6, min: 7, heavy: true, written: true }
+};
+const DEFAULT_CONFIG = {
+  chapters: { 1: "Úvod", 2: "Soustavy lineárních rovnic", 3: "Tělesa", 4: "Matice", 5: "Vektorové prostory", 6: "Lineární zobrazení", 7: "Determinant" },
+  weeks: [
+    { from: "2026-09-28", topic: "Úvod, analytická geometrie, zobrazení", secs: ["1.1", "1.2", "1.3", "1.5"] },
+    { from: "2026-10-05", topic: "Soustavy lineárních rovnic", secs: ["2.1", "2.2", "2.3", "2.4", "2.5"] },
+    { from: "2026-10-12", topic: "Tělesa, úvod k maticím", secs: ["3.1", "3.2", "3.3", "3.4", "3.5", "4.1", "4.2.1", "4.2.2", "4.2.3"] },
+    { from: "2026-10-19", topic: "Elementární matice, matice soustavy rovnic, matice jako zobrazení", secs: ["4.2.4", "4.3", "4.4"] },
+    { from: "2026-11-02", topic: "Inverzní matice, regulární matice. Vektorové prostory", secs: ["4.5", "5.1", "5.2"] },
+    { from: "2026-11-09", topic: "Lineární (ne)závislost, báze, Steinitzova věta", secs: ["5.3", "5.4.1"] },
+    { from: "2026-11-23", topic: "Báze jako souřadnicový systém, matice přechodu", secs: ["5.4.2", "5.4.3"] },
+    { from: "2026-11-30", topic: "Hodnost matice, průnik a součet podprostorů. Lineární zobrazení", secs: ["5.5", "5.6", "6.1", "6.2"] },
+    { from: "2026-12-07", topic: "Skládání lineárních zobrazení, typy, jádro a obraz", secs: ["6.3", "6.4", "6.5"] },
+    { from: "2026-12-14", topic: "Permutace a motivace k determinantům", secs: ["7.1", "7.2"] },
+    { from: "2027-01-04", topic: "Determinanty, výpočet, adjungovaná matice", secs: ["7.3", "7.4", "7.5"] }
+  ],
+  tests: [
+    { id: "mt1", date: "2026-11-18", name: "1. midterm", chapters: [1, 2, 3, 4], noProof: [1] },
+    { id: "mt2", date: "2026-12-16", name: "2. midterm", chapters: [1, 2, 3, 4, 5], noProof: [1] }
+  ],
+  skriptaPageOffset: 0,
+  minutes: 18
+};
+
+/* ---------------- helpers ---------------- */
+const $ = (s, el = document) => el.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+function md(s) {
+  // keep multi-line display math on one line so MathJax sees it in one text node
+  const src = String(s ?? "").trim().replace(/\$\$([\s\S]*?)\$\$/g, m => m.replace(/\s*\n\s*/g, " "));
+  let html = "", para = [], list = null, tag = "";
+  const flushP = () => { if (para.length) { html += "<p>" + para.map(inline).join("<br>") + "</p>"; para = []; } };
+  const flushL = () => { if (list) { html += `<${tag}>` + list.map(x => "<li>" + inline(x) + "</li>").join("") + `</${tag}>`; list = null; } };
+  for (const raw of src.split("\n")) {
+    const l = raw.trimEnd(); let m;
+    if (!l.trim()) { flushP(); flushL(); continue; }
+    if ((m = l.match(/^\s*[-•]\s+(.*)$/))) { flushP(); if (tag !== "ul") flushL(); tag = "ul"; (list = list || []).push(m[1]); continue; }
+    if ((m = l.match(/^\s*\d+\.\s+(.*)$/))) { flushP(); if (tag !== "ol") flushL(); tag = "ol"; (list = list || []).push(m[1]); continue; }
+    flushL(); para.push(l);
+  }
+  flushP(); flushL();
+  return html;
+}
+function inline(s) { return esc(s).replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>"); }
+const today = () => new Date().toLocaleDateString("sv-SE", { timeZone: TZ });
+function addDays(s, n) { const [y, m, d] = s.split("-").map(Number); return new Date(Date.UTC(y, m - 1, d + n)).toISOString().slice(0, 10); }
+function daysBetween(a, b) { const p = x => { const [y, m, d] = x.split("-").map(Number); return Date.UTC(y, m - 1, d); }; return Math.round((p(b) - p(a)) / 86400000); }
+function secCmp(a, b) { const x = String(a).split(".").map(Number), y = String(b).split(".").map(Number); for (let i = 0; i < Math.max(x.length, y.length); i++) { const d = (x[i] ?? -1) - (y[i] ?? -1); if (d) return d; } return 0; }
+const chapOf = sec => Number(String(sec).split(".")[0]);
+function within(sec, list) { return list.some(c => sec === c || String(sec).startsWith(c + ".")); }
+function fmtDate(s, opts) { const [y, m, d] = s.split("-").map(Number); return new Date(Date.UTC(y, m - 1, d, 12)).toLocaleDateString("cs-CZ", Object.assign({ timeZone: "UTC" }, opts)); }
+function hashStr(s) { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+function rng(seed) { let a = seed >>> 0; return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function shuffle(arr, r) { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+function norm(s) { return String(s ?? "").toLowerCase().normalize("NFKC").replace(/[−–—]/g, "-").replace(/\s+/g, "").replace(/,/g, ".").replace(/[{}$\\]/g, "").replace(/\.$/, ""); }
+let toastT;
+function toast(msg) { const t = $("#toast"); t.textContent = msg; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => t.hidden = true, 3200); }
+function plural(n, one, few, many) { return n === 1 ? one : (n >= 2 && n <= 4) ? few : many; }
+function refLink(q, calm) {
+  const r = q.ref || {}; const sec = r.s || q.sec; const page = r.p ? Number(r.p) + Number(state.config.skriptaPageOffset || 0) : null;
+  const href = SKRIPTA + (page ? "#page=" + page : "");
+  const what = [r.t, r.label].filter(Boolean).join(" · ");
+  return `<a class="ref ${calm ? "calm" : ""}" href="${href}" target="_blank" rel="noopener">
+    <span class="sec">§ ${esc(sec)}</span>
+    <span class="prose">${calm ? "Kde to je ve skriptech" : "Přečti si znovu ve skriptech"}${what ? ": " + inline(what) : ""}${r.p ? ` <span class="muted mono">(s. ${esc(r.p)})</span>` : ""}</span>
+  </a>`;
+}
+
+/* ---------------- state ---------------- */
+const state = {
+  db: null, sample: null, ready: { q: false, p: false, c: false },
+  Q: new Map(), P: {}, R: {}, config: DEFAULT_CONFIG,
+  view: "today", log: null, logs: [], session: null, bankFilter: { ch: 0, type: "", text: "" }
+};
+const writeChain = {};
+function queueWrite(path, fn) {
+  writeChain[path] = (writeChain[path] || Promise.resolve()).then(fn).catch(e => { console.warn("write failed", path, e); if (e && e.code === "quota_exceeded") toast("Úložiště je plné, pokrok se neuložil."); else toast("Pokrok se nepodařilo uložit. Zkontroluj připojení."); });
+  return writeChain[path];
+}
+
+/* ---------------- course logic ---------------- */
+function coveredSecs(d = today()) { return state.config.weeks.filter(w => w.from <= d).flatMap(w => w.secs); }
+function currentWeek(d = today()) { const ws = state.config.weeks.filter(w => w.from <= d); return ws[ws.length - 1] || null; }
+function nextWeek(d = today()) { return state.config.weeks.find(w => w.from > d) || null; }
+function nextTest(d = today()) { return (state.config.tests || []).filter(t => t.date >= d).sort((a, b) => a.date.localeCompare(b.date))[0] || null; }
+function isCovered(q) { return within(q.sec, coveredSecs()); }
+function allQ() { return [...state.Q.values()].filter(q => !q.hidden && TYPES[q.type]); }
+function inMode(q, mode) {
+  if (!isCovered(q)) return false;
+  if (!mode || mode === "daily") return true;
+  if (mode === "weak") { const p = state.P[q.id]; return p && (p.box <= 1 || (p.bad + 0.5 * (p.part || 0)) / Math.max(1, p.n) >= 0.4); }
+  if (mode.startsWith("test:")) {
+    const t = (state.config.tests || []).find(x => x.id === mode.slice(5)); if (!t) return false;
+    const ch = chapOf(q.sec);
+    if (!t.chapters.includes(ch)) return false;
+    if ((t.noProof || []).includes(ch) && q.type === "proof") return false;
+    return true;
+  }
+  if (mode.startsWith("ch:")) return chapOf(q.sec) === Number(mode.slice(3));
+  if (mode.startsWith("sec:")) return within(q.sec, [mode.slice(4)]);
+  if (mode.startsWith("q:")) return q.id === mode.slice(2);
+  return true;
+}
+function modeName(mode) {
+  if (!mode || mode === "daily") return "Denní sezení";
+  if (mode === "weak") return "Slabá místa";
+  if (mode.startsWith("test:")) { const t = (state.config.tests || []).find(x => x.id === mode.slice(5)); return t ? "Příprava: " + t.name : "Test"; }
+  if (mode.startsWith("ch:")) return "Kap. " + mode.slice(3) + " — " + (state.config.chapters[mode.slice(3)] || "");
+  if (mode.startsWith("sec:")) return "§ " + mode.slice(4);
+  if (mode.startsWith("q:")) return "Jedna otázka";
+  return mode;
+}
+
+/* spaced repetition: boxes 1..6 */
+const INTERVALS = [0, 1, 3, 7, 14, 30, 60];
+function schedule(prev, g) {
+  const d = today();
+  let box = prev ? prev.box : 0;
+  let due;
+  if (g === 2) { box = prev ? Math.min(6, box + 1) : 2; due = addDays(d, INTERVALS[box]); }
+  else if (g === 1) { box = Math.max(1, box); due = addDays(d, Math.max(1, Math.floor(INTERVALS[box] / 3))); }
+  else { box = 1; due = addDays(d, 1); }
+  return { box, due };
+}
+
+function buildDailyPlan(dateStr) {
+  const d = dateStr || today();
+  const r = rng(hashStr(d));
+  const qs = allQ().filter(q => inMode(q, "daily"));
+  const P = state.P;
+  const budget = Number(state.config.minutes) || 18;
+  const cur = currentWeek(d); const curSecs = cur ? cur.secs : [];
+  const due = shuffle(qs.filter(q => P[q.id] && P[q.id].due <= d), r).sort((a, b) => P[a.id].due.localeCompare(P[b.id].due) || P[a.id].box - P[b.id].box);
+  // new material: this week's sections first, the rest mixed across all covered chapters
+  const fresh = shuffle(qs.filter(q => !P[q.id]), r).sort((a, b) => within(b.sec, curSecs) - within(a.sec, curSecs));
+  const picked = new Set(); const plan = []; let mins = 0;
+  const take = q => { if (!q || picked.has(q.id)) return false; picked.add(q.id); plan.push(q); mins += TYPES[q.type].min; return true; };
+  // heavy slot rotates by weekday: Mon proof, Tue calc, Wed proof, Thu think, Fri proof, Sat calc, Sun think
+  const wd = new Date(d + "T12:00:00Z").getUTCDay();
+  const heavyPref = ["think", "proof", "calc", "proof", "think", "proof", "calc"][wd];
+  const heavyOrder = [heavyPref, "proof", "calc", "think"];
+  let heavy = null;
+  for (const t of heavyOrder) { heavy = due.find(q => q.type === t) || fresh.find(q => q.type === t); if (heavy) break; }
+  // definition / theorem slot
+  const defSlot = due.find(q => q.type === "def" || q.type === "thm") || fresh.find(q => q.type === "def" || q.type === "thm");
+  const lightBudget = budget - (heavy ? TYPES[heavy.type].min : 0) - (defSlot ? TYPES[defSlot.type].min : 0);
+  const reviewBudget = lightBudget * 0.6;
+  const reviews = [];
+  for (const q of due) { if (!TYPES[q.type].light || q === defSlot) continue; if (mins + TYPES[q.type].min > reviewBudget) break; if (take(q)) reviews.push(q); }
+  for (const q of fresh) { if (!TYPES[q.type].light || q === defSlot) continue; if (mins + TYPES[q.type].min > lightBudget) continue; take(q); if (plan.length >= 10) break; }
+  // fill with more reviews if new material ran out
+  for (const q of due) { if (!TYPES[q.type].light || q === defSlot) continue; if (mins + TYPES[q.type].min > lightBudget) break; take(q); }
+  // order: quick yes/no + choice first, then short, then def slot, heavy last
+  const rank = { yn: 0, mc: 1, short: 2, def: 3, thm: 3 };
+  plan.sort((a, b) => rank[a.type] - rank[b.type]);
+  if (defSlot) take(defSlot);
+  if (heavy) take(heavy);
+  return plan.map(q => ({ id: q.id, isNew: !P[q.id] }));
+}
+function buildExtraPlan(mode, n = 10) {
+  const d = today(); const r = rng(Date.now());
+  const qs = shuffle(allQ().filter(q => inMode(q, mode)), r);
+  const P = state.P;
+  const score = q => { const p = P[q.id]; if (!p) return 2.5; return (p.due <= d ? 0 : 3) + p.box; };
+  qs.sort((a, b) => score(a) - score(b));
+  const out = []; let heavy = 0;
+  for (const q of qs) { if (TYPES[q.type].heavy) { if (heavy >= 2) continue; heavy++; } out.push(q); if (out.length >= n) break; }
+  const rank = { yn: 0, mc: 1, short: 2, def: 3, thm: 3, calc: 4, proof: 5, think: 5 };
+  out.sort((a, b) => rank[a.type] - rank[b.type]);
+  return out.map(q => ({ id: q.id, isNew: !P[q.id] }));
+}
+function planSummary(plan) {
+  let rev = 0, nw = 0, mins = 0; const types = {};
+  for (const it of plan) { const q = state.Q.get(it.id); if (!q) continue; it.isNew ? nw++ : rev++; mins += TYPES[q.type].min; types[q.type] = (types[q.type] || 0) + 1; }
+  return { rev, nw, mins: Math.round(mins), types, n: plan.length };
+}
+
+/* ---------------- capability bootstrap ---------------- */
+(async function boot() {
+  $("#hdr-date").textContent = fmtDate(today(), { weekday: "short", day: "numeric", month: "short" });
+  document.querySelectorAll("nav.tabs button").forEach(b => b.addEventListener("click", () => go(b.dataset.view)));
+  let db = null;
+  try { db = window.claude ? await window.claude.use("db") : null; } catch (e) { db = null; }
+  state.db = db;
+  try { state.sample = window.claude ? await window.claude.use("sample") : null; } catch (e) { state.sample = null; }
+  if (!db) { state.ready = { q: true, p: true, c: true }; render(); return; }
+  db.collection("questions").onSnapshot(snap => {
+    const m = new Map(); snap.docs.forEach(d => { const v = d.data(); if (v) m.set(d.id, Object.assign({ id: d.id }, v)); });
+    state.Q = m; state.ready.q = true; renderSoft();
+  }, e => { console.warn(e); state.ready.q = true; renderSoft(); });
+  db.collection("progress").onSnapshot(snap => {
+    const o = {}; snap.docs.forEach(d => { o[d.id] = d.data(); }); state.P = o; state.ready.p = true; renderSoft();
+  }, e => { console.warn(e); state.ready.p = true; renderSoft(); });
+  db.collection("reading").onSnapshot(snap => { const o = {}; snap.docs.forEach(d => { o[d.id] = d.data(); }); state.R = o; renderSoft(); }, () => {});
+  db.doc("config/course").onSnapshot(snap => {
+    const v = snap.exists ? snap.data() : null; state.config = Object.assign({}, DEFAULT_CONFIG, v || {}); state.ready.c = true; renderSoft();
+  }, () => { state.ready.c = true; renderSoft(); });
+  db.doc("log/" + today()).onSnapshot(snap => { if (!state.session || state.session.kind !== "daily") state.log = snap.exists ? snap.data() : null; renderSoft(); }, () => {});
+  loadLogs();
+  render();
+})();
+async function loadLogs() {
+  if (!state.db) return;
+  try { const s = await state.db.collection("log").orderBy("date", "desc").limit(120).get(); state.logs = s.docs.map(d => d.data()); renderSoft(); } catch (e) { console.warn(e); }
+}
+function streak() {
+  const done = new Set(state.logs.filter(l => l && (l.done || (l.answered || 0) + (l.extraN || 0) >= 5)).map(l => l.date));
+  if (state.log && state.log.done) done.add(today());
+  let n = 0; let d = today();
+  if (!done.has(d)) d = addDays(d, -1);
+  while (done.has(d)) { n++; d = addDays(d, -1); }
+  return n;
+}
+
+/* ---------------- routing ---------------- */
+function go(v) {
+  state.view = v;
+  document.querySelectorAll("nav.tabs button").forEach(b => { if (b.dataset.view === v) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current"); });
+  render(); window.scrollTo({ top: 0 });
+}
+let softT;
+function renderSoft() { if (state.session && state.view === "today") return; clearTimeout(softT); softT = setTimeout(render, 60); }
+function render() {
+  const el = $("#view");
+  if (state.view === "today") el.innerHTML = state.session ? "" : viewToday();
+  if (state.view === "stats") el.innerHTML = viewStats();
+  if (state.view === "bank") el.innerHTML = viewBank();
+  if (state.view === "today" && state.session) { renderQuestion(); return; }
+  bindView(el); typeset(el);
+}
+
+/* ---------------- views: today ---------------- */
+function readingList() {
+  const bySec = {};
+  for (const q of allQ()) {
+    const p = state.P[q.id]; if (!p || p.g === 2) continue;
+    const key = (q.ref && q.ref.s) || q.sec; const rd = state.R[key.replace(/[^0-9.]/g, "")];
+    if (rd && rd.ts >= (p.ts || 0)) continue;
+    (bySec[key] = bySec[key] || { sec: key, n: 0, q, ts: 0 }); bySec[key].n++; bySec[key].ts = Math.max(bySec[key].ts, p.ts || 0);
+  }
+  return Object.values(bySec).sort((a, b) => b.n - a.n || b.ts - a.ts);
+}
+function viewToday() {
+  const d = today();
+  const qs = allQ();
+  const loading = !(state.ready.q && state.ready.p);
+  const head = `<div class="today-hero">
+      <span class="eyebrow">${esc(fmtDate(d, { weekday: "long", day: "numeric", month: "long" }))}${streak() ? ` · ${streak()} ${plural(streak(), "den", "dny", "dní")} v řadě` : ""}</span>`;
+  if (!state.db) return `<section class="panel">${head}<h1>Ranní lineárka</h1></div>
+      <p class="notice">Tato stránka ukládá pokrok v databázi Claude. Otevři ji v aplikaci Claude nebo na claude.ai (po přihlášení) a začni sezení.</p></section>`;
+  if (loading) return `<section class="panel">${head}<h1>Připravuji dnešní sezení</h1></div><p class="muted"><span class="spinner"></span> Načítám otázky a pokrok…</p></section>`;
+  if (!qs.length) return `<section class="panel">${head}<h1>Zatím tu nejsou žádné otázky</h1></div>
+      <p class="notice">Otázky ke kapitolám 1–4 skript se objeví, jakmile je Claude přidá. Potom přibývají každý týden podle plánu přednášky.</p></section>` + upcomingBlocks();
+
+  const log = state.log;
+  let main;
+  if (log && log.done) {
+    const res = Object.values(log.res || {}); const ok = res.filter(g => g === 2).length, pt = res.filter(g => g === 1).length, bad = res.filter(g => g === 0).length;
+    main = `<section class="panel done-card">${head}<h1>Dnešní sezení je hotové</h1></div>
+      <div class="tally"><span><b class="mono" style="color:var(--ok)">${ok}</b>správně</span><span><b class="mono" style="color:var(--part)">${pt}</b>částečně</span><span><b class="mono" style="color:var(--bad)">${bad}</b>špatně</span></div>
+      <p class="muted">Zítra ráno přijdou nové otázky a zopakuješ si, co dnes nevyšlo.</p>
+      <div class="row"><button class="btn primary" data-act="extra" data-mode="daily">Dalších 10 otázek</button><button class="btn" data-act="extra" data-mode="weak">Slabá místa</button></div></section>`;
+  } else {
+    const plan = log && log.plan ? log.plan : buildDailyPlan(d);
+    const s = planSummary(plan);
+    const started = log && log.plan && log.idx > 0;
+    if (!plan.length) {
+      main = `<section class="panel">${head}<h1>Na dnešek je vše zopakováno</h1></div><p class="muted">Dnes nejsou žádné nové otázky ani opakování. Můžeš si zatrénovat libovolně.</p>
+        <div class="row"><button class="btn primary" data-act="extra" data-mode="daily">10 náhodných otázek</button></div></section>`;
+    } else {
+      const tchips = Object.entries(s.types).map(([t, n]) => `<span class="chip plain">${esc(TYPES[t].label)} × ${n}</span>`).join("");
+      main = `<section class="panel">${head}
+        <h1>${started ? "Pokračujeme v dnešním sezení" : "Dnešní sezení"}</h1></div>
+        <p><span class="mono">${s.n}</span> ${plural(s.n, "otázka", "otázky", "otázek")} · asi <span class="mono">${s.mins}</span> min · ${s.rev} k opakování, ${s.nw} ${plural(s.nw, "nová", "nové", "nových")}</p>
+        <div class="plan-chips">${tchips}</div>
+        <div class="row"><button class="btn primary big" data-act="start">${started ? `Pokračovat · ${log.idx}/${log.plan.length}` : "Začít"}</button></div>
+      </section>`;
+    }
+  }
+  return main + upcomingBlocks();
+}
+function upcomingBlocks() {
+  const d = today();
+  const t = nextTest(d); const w = currentWeek(d); const nw = nextWeek(d);
+  const rl = readingList().slice(0, 4);
+  let html = `<div class="split">`;
+  if (t) {
+    const n = daysBetween(d, t.date);
+    html += `<section class="panel"><span class="eyebrow">Nejbližší test</span>
+      <div class="countdown"><span class="n">${n}</span><span>${plural(n, "den", "dny", "dní")} do „${esc(t.name)}“</span></div>
+      <p class="muted">${esc(fmtDate(t.date, { weekday: "long", day: "numeric", month: "long" }))} · kap. ${t.chapters.join(", ")}${(t.noProof || []).length ? ` (kap. ${t.noProof.join(", ")} bez důkazů)` : ""}</p>
+      <div class="row"><button class="btn" data-act="extra" data-mode="test:${esc(t.id)}">Trénovat na test</button></div></section>`;
+  }
+  if (w) {
+    html += `<section class="panel"><span class="eyebrow">Téma týdne od ${esc(fmtDate(w.from, { day: "numeric", month: "numeric" }))}</span>
+      <h3>${esc(w.topic)}</h3>
+      <p class="muted">Přečíst: ${w.secs.map(s => `<span class="mono">§${esc(s)}</span>`).join(", ")}</p>
+      ${nw ? `<p class="muted" style="font-size:.88rem">Od ${esc(fmtDate(nw.from, { day: "numeric", month: "numeric" }))}: ${esc(nw.topic)} (${nw.secs.map(s => "§" + esc(s)).join(", ")}) — vyplatí se to prolistovat předem.</p>` : ""}
+      <div class="row"><a class="btn" href="${SKRIPTA}" target="_blank" rel="noopener">Otevřít skripta</a></div></section>`;
+  }
+  html += `</div>`;
+  if (rl.length) {
+    html += `<section class="panel"><span class="eyebrow">Co si přečíst znovu</span>
+      <div class="reread">${rl.map(x => `<div class="reread-item">
+        <span class="chip sec">§ ${esc(x.sec)}</span>
+        <span class="t prose">${inline((x.q.ref && x.q.ref.t) || (state.config.chapters[chapOf(x.sec)] || ""))} <span class="muted">· ${x.n} ${plural(x.n, "chyba", "chyby", "chyb")}</span></span>
+        <span class="row"><a class="btn ghost" href="${SKRIPTA}${x.q.ref && x.q.ref.p ? "#page=" + (Number(x.q.ref.p) + Number(state.config.skriptaPageOffset || 0)) : ""}" target="_blank" rel="noopener">Číst</a><button class="btn ghost" data-act="read" data-sec="${esc(x.sec)}">Přečteno</button></span>
+      </div>`).join("")}</div></section>`;
+  }
+  const chs = [...new Set(allQ().filter(isCovered).map(q => chapOf(q.sec)))].sort((a, b) => a - b);
+  if (chs.length) {
+    html += `<section class="panel"><span class="eyebrow">Další trénink</span>
+      <div class="modes"><button class="btn" data-act="extra" data-mode="weak">Slabá místa</button>${chs.map(c => `<button class="btn" data-act="extra" data-mode="ch:${c}">Kap. ${c} · ${esc(state.config.chapters[c] || "")}</button>`).join("")}</div></section>`;
+  }
+  return html;
+}
+
+/* ---------------- views: stats ---------------- */
+function viewStats() {
+  if (!state.db) return `<section class="panel"><h1>Pokrok</h1><p class="notice">Pokrok uvidíš, když stránku otevřeš v Claude.</p></section>`;
+  const qs = allQ(); const P = state.P;
+  const seen = qs.filter(q => P[q.id]); const mastered = seen.filter(q => P[q.id].box >= 4).length;
+  const answers = seen.reduce((s, q) => s + (P[q.id].n || 0), 0);
+  const okAns = seen.reduce((s, q) => s + (P[q.id].ok || 0), 0);
+  const d = today();
+  const byDate = {}; state.logs.forEach(l => { if (l) byDate[l.date] = l; }); if (state.log) byDate[d] = state.log;
+  const strip = Array.from({ length: 28 }, (_, i) => { const dd = addDays(d, i - 27); const l = byDate[dd]; const cls = l && l.done ? "d2" : (l && ((l.answered || 0) > 0 || l.idx > 0) ? "d1" : ""); return `<i class="${cls}" title="${dd}"></i>`; }).join("");
+  const chapters = {};
+  qs.forEach(q => { const c = chapOf(q.sec); const k = (q.ref && q.ref.s) ? q.ref.s.split(".").slice(0, 2).join(".") : q.sec.split(".").slice(0, 2).join("."); ((chapters[c] = chapters[c] || {})[k] = chapters[c][k] || []).push(q); });
+  const chapHtml = Object.keys(chapters).sort((a, b) => a - b).map(c => {
+    const secs = Object.keys(chapters[c]).sort(secCmp);
+    const rows = secs.map(s => {
+      const list = chapters[c][s]; const tot = list.length;
+      const m = list.filter(q => P[q.id] && P[q.id].box >= 4).length; const l = list.filter(q => P[q.id] && P[q.id].box < 4).length;
+      const n = list.reduce((a, q) => a + ((P[q.id] && P[q.id].n) || 0), 0); const ok = list.reduce((a, q) => a + ((P[q.id] && P[q.id].ok) || 0), 0);
+      const cov = within(s, coveredSecs()) || list.some(isCovered);
+      return `<div class="secrow"><span class="mono">§${esc(s)}</span>
+        <span class="meter" title="${m} zvládnuto, ${l} rozpracováno z ${tot}"><span class="m" style="width:${(m / tot * 100).toFixed(1)}%"></span><span class="l" style="width:${(l / tot * 100).toFixed(1)}%"></span></span>
+        <span class="mono muted" style="font-size:.8rem">${n ? Math.round(ok / n * 100) + "% · " : ""}${m}/${tot}</span>
+        ${cov ? `<button class="tr" data-act="extra" data-mode="sec:${esc(s)}">trénovat</button>` : `<span class="muted" style="font-size:.78rem">brzy</span>`}</div>`;
+    }).join("");
+    return `<div class="chap"><div class="chap-head"><h3>${c}. ${esc(state.config.chapters[c] || "")}</h3></div>${rows}</div>`;
+  }).join("");
+  return `<section class="stack"><span class="eyebrow">Pokrok</span><h1>Co už umíš</h1></section>
+    <div class="kpis">
+      <div class="kpi"><div class="v">${streak()}</div><div class="muted">${plural(streak(), "den", "dny", "dní")} v řadě</div></div>
+      <div class="kpi"><div class="v">${mastered}<span class="muted" style="font-size:.9rem"> / ${qs.length}</span></div><div class="muted">zvládnuto</div></div>
+      <div class="kpi"><div class="v">${answers ? Math.round(okAns / answers * 100) + "%" : "—"}</div><div class="muted">správně</div></div>
+    </div>
+    <section class="panel"><div class="row" style="justify-content:space-between"><span class="eyebrow">Poslední 4 týdny</span><span class="muted mono" style="font-size:.78rem">${esc(fmtDate(addDays(d, -27), { day: "numeric", month: "numeric" }))} – ${esc(fmtDate(d, { day: "numeric", month: "numeric" }))}</span></div>
+      <div class="days">${strip}</div>
+      <div class="legend"><span><i style="background:var(--accent)"></i>sezení dokončeno</span><span><i style="background:var(--accent-soft);outline:1px solid var(--accent)"></i>částečně</span></div></section>
+    <section class="panel"><div class="legend"><span><i style="background:var(--ok)"></i>zvládnuto (opakování za ≥ 14 dní)</span><span><i style="background:var(--part);opacity:.7"></i>rozpracováno</span><span><i style="background:var(--line)"></i>zatím nebylo</span></div>
+      ${chapHtml || `<p class="muted">Zatím tu nejsou otázky.</p>`}</section>`;
+}
+
+/* ---------------- views: bank ---------------- */
+function viewBank() {
+  const f = state.bankFilter; const P = state.P;
+  const chs = [...new Set(allQ().map(q => chapOf(q.sec)))].sort((a, b) => a - b);
+  let list = allQ().filter(q => (!f.ch || chapOf(q.sec) === f.ch) && (!f.type || q.type === f.type || (f.type === "dt" && (q.type === "def" || q.type === "thm"))));
+  if (f.text) { const t = f.text.toLowerCase(); list = list.filter(q => (q.q + " " + (q.model || "") + " " + q.sec).toLowerCase().includes(t)); }
+  list.sort((a, b) => secCmp(a.sec, b.sec) || a.id.localeCompare(b.id));
+  const shown = list.slice(0, 150);
+  const items = shown.map(q => {
+    const p = P[q.id]; const dot = !p ? "" : p.box <= 1 ? "b1" : p.box <= 2 ? "b2" : p.box <= 3 ? "b3" : "b4";
+    const answer = q.type === "yn" ? `<p><strong>${q.ans ? "Ano" : "Ne"}</strong></p>` : q.type === "mc" ? `<p><strong>${esc((q.opts || [])[q.correct])}</strong></p>` : q.type === "short" ? `<p><strong>${esc(q.answer || (q.accept || [])[0] || "")}</strong></p>` : "";
+    return `<details class="qitem"><summary><span class="dot ${dot}"></span><span class="stack" style="gap:4px"><span class="row"><span class="chip sec">§ ${esc(q.sec)}</span><span class="chip plain">${esc(TYPES[q.type].label)}</span>${isCovered(q) ? "" : `<span class="chip plain">ještě nebylo</span>`}</span><span class="qtext" style="font-size:1rem">${md(q.q)}</span></span></summary>
+      <div class="body prose">${answer}${q.model ? md(q.model) : ""}${q.why ? `<div class="muted">${md(q.why)}</div>` : ""}
+      <div class="row">${refLink(q, true)}${isCovered(q) ? `<button class="btn" data-act="extra" data-mode="q:${esc(q.id)}">Procvičit</button>` : ""}</div></div></details>`;
+  }).join("");
+  return `<section class="stack"><span class="eyebrow">Otázky · ${allQ().length}</span><h1>Definice, věty, úlohy</h1>
+      <p class="muted">Tady si můžeš projít všechny otázky i s odpověďmi. Před testem se hodí projít definice a věty z daného oddílu.</p></section>
+    <section class="panel filters">
+      <div class="seg" role="group" aria-label="Kapitola"><button data-f="ch" data-v="0" aria-pressed="${!f.ch}">Vše</button>${chs.map(c => `<button data-f="ch" data-v="${c}" aria-pressed="${f.ch === c}">Kap. ${c}</button>`).join("")}</div>
+      <div class="seg" role="group" aria-label="Typ"><button data-f="type" data-v="" aria-pressed="${!f.type}">Všechny typy</button><button data-f="type" data-v="dt" aria-pressed="${f.type === "dt"}">Definice a věty</button><button data-f="type" data-v="proof" aria-pressed="${f.type === "proof"}">Důkazy</button><button data-f="type" data-v="yn" aria-pressed="${f.type === "yn"}">Ano/Ne</button><button data-f="type" data-v="calc" aria-pressed="${f.type === "calc"}">Výpočty</button><button data-f="type" data-v="think" aria-pressed="${f.type === "think"}">Na zamyšlení</button></div>
+      <input type="text" id="bank-search" placeholder="Hledat: báze, regulární, Steinitz…" value="${esc(f.text)}" autocomplete="off">
+    </section>
+    <section class="panel" style="gap:0">${items || `<p class="muted">Nic nenalezeno.</p>`}${list.length > shown.length ? `<p class="muted" style="padding-top:10px">Zobrazeno ${shown.length} z ${list.length}. Zúžení filtru pomůže.</p>` : ""}</section>`;
+}
+
+/* ---------------- binding ---------------- */
+function bindView(el) {
+  el.querySelectorAll("[data-act]").forEach(b => b.addEventListener("click", onAct));
+  el.querySelectorAll(".seg [data-f]").forEach(b => b.addEventListener("click", () => { const k = b.dataset.f; state.bankFilter[k] = k === "ch" ? Number(b.dataset.v) : b.dataset.v; render(); }));
+  const s = $("#bank-search", el);
+  if (s) { let t; s.addEventListener("input", () => { clearTimeout(t); t = setTimeout(() => { state.bankFilter.text = s.value; const pos = s.selectionStart; render(); const n = $("#bank-search"); if (n) { n.focus(); n.setSelectionRange(pos, pos); } }, 250); }); }
+}
+async function onAct(e) {
+  const b = e.currentTarget; const act = b.dataset.act;
+  if (act === "start") return startDaily();
+  if (act === "extra") return startExtra(b.dataset.mode);
+  if (act === "read") {
+    const sec = b.dataset.sec.replace(/[^0-9.]/g, "");
+    if (!state.db || !sec) return;
+    b.disabled = true;
+    state.R[sec] = { sec, ts: Date.now(), date: today() }; render();
+    queueWrite("reading/" + sec, () => state.db.doc("reading/" + sec).set(state.R[sec]));
+  }
+}
+
+/* ---------------- sessions ---------------- */
+function startDaily() {
+  const d = today();
+  let log = state.log;
+  if (!log || !log.plan || log.date !== d) {
+    log = { date: d, mode: "daily", plan: buildDailyPlan(d), idx: 0, res: {}, done: false, answered: 0, extraN: (log && log.date === d && log.extraN) || 0, t0: Date.now() };
+  } else log = JSON.parse(JSON.stringify(log));
+  log.plan = log.plan.filter(it => state.Q.has(it.id));
+  if (!log.plan.length) { toast("Na dnešek nejsou žádné otázky."); return; }
+  state.log = log;
+  state.session = { kind: "daily", plan: log.plan, idx: log.idx || 0, res: log.res || {} };
+  saveLog();
+  go("today");
+}
+function startExtra(mode) {
+  const plan = buildExtraPlan(mode, mode.startsWith("q:") ? 1 : 10);
+  if (!plan.length) { toast("Pro tento režim zatím nejsou otázky."); return; }
+  state.session = { kind: "extra", mode, plan, idx: 0, res: {} };
+  state.view = "today";
+  document.querySelectorAll("nav.tabs button").forEach(x => { if (x.dataset.view === "today") x.setAttribute("aria-current", "page"); else x.removeAttribute("aria-current"); });
+  render(); window.scrollTo({ top: 0 });
+}
+function saveLog() {
+  if (!state.db || !state.log) return;
+  const snap = JSON.parse(JSON.stringify(state.log));
+  queueWrite("log/" + snap.date, () => state.db.doc("log/" + snap.date).set(snap));
+}
+function endSession(abort) {
+  const s = state.session; state.session = null;
+  if (s && s.kind === "daily" && state.log && !abort) { state.log.done = true; state.log.t1 = Date.now(); saveLog(); loadLogs(); }
+  render(); window.scrollTo({ top: 0 });
+}
+
+/* per-question UI state */
+let cur = null;
+function renderQuestion() {
+  const s = state.session; const el = $("#view");
+  if (s.idx >= s.plan.length) return renderSessionEnd();
+  const it = s.plan[s.idx]; const q = state.Q.get(it.id);
+  if (!q) { s.idx++; return renderQuestion(); }
+  const T = TYPES[q.type];
+  cur = { q, it, answered: false, g: null, hints: 0, ai: null, draft: "", photo: null };
+  const total = s.plan.length;
+  el.innerHTML = `
+    <div class="progress"><span class="mono muted" style="font-size:.82rem">${s.idx + 1}/${total}</span><span class="bar"><i style="width:${(s.idx / total * 100).toFixed(1)}%"></i></span>
+      <button class="btn ghost" id="q-exit" style="padding:5px 10px;font-size:.84rem">Pauza</button></div>
+    <article class="sheet" id="sheet">
+      <div class="qmeta"><span class="chip">${esc(T.label)} · ${T.pts} b.</span><span class="chip sec">§ ${esc(q.sec)}</span>${it.again ? `<span class="chip plain">znovu</span>` : it.isNew ? `<span class="chip plain">nová</span>` : `<span class="chip plain">opakování</span>`}${s.kind === "extra" ? `<span class="chip plain">${esc(modeName(s.mode))}</span>` : ""}</div>
+      <div class="qtext">${md(q.q)}</div>
+      <div id="ans" class="stack"></div>
+      <div id="fb" class="stack"></div>
+    </article>`;
+  $("#q-exit").addEventListener("click", () => { if (s.kind === "daily") { state.log.idx = s.idx; saveLog(); } state.session = null; render(); });
+  renderAnswerArea();
+  typeset($("#sheet"));
+}
+function renderAnswerArea() {
+  const q = cur.q; const box = $("#ans");
+  if (q.type === "yn") {
+    box.innerHTML = `<div class="yn"><button class="btn" data-v="1">Ano</button><button class="btn" data-v="0">Ne</button></div>${dontKnow()}`;
+    box.querySelectorAll(".yn .btn").forEach(b => b.addEventListener("click", () => {
+      if (cur.answered) return; const v = b.dataset.v === "1"; const ok = v === !!q.ans;
+      box.querySelectorAll(".yn .btn").forEach(x => { x.disabled = true; if ((x.dataset.v === "1") === !!q.ans) x.classList.add("is-ok"); else if (x === b) x.classList.add("is-bad"); });
+      finish(ok ? 2 : 0);
+    }));
+  } else if (q.type === "mc") {
+    const order = (q.opts || []).map((o, i) => i);
+    box.innerHTML = `<div class="choices">${order.map((i, k) => `<button class="choice" data-i="${i}"><span class="k">${"abcdef"[k]})</span><span class="prose">${inline(q.opts[i])}</span></button>`).join("")}</div>${dontKnow()}`;
+    box.querySelectorAll(".choice").forEach(b => b.addEventListener("click", () => {
+      if (cur.answered) return; const i = Number(b.dataset.i); const ok = i === Number(q.correct);
+      box.querySelectorAll(".choice").forEach(x => { x.disabled = true; if (Number(x.dataset.i) === Number(q.correct)) x.classList.add("is-ok"); else if (x === b) x.classList.add("is-bad"); });
+      finish(ok ? 2 : 0);
+    }));
+  } else if (q.type === "short") {
+    box.innerHTML = `<form id="sf" class="row" style="flex-wrap:nowrap"><input type="text" id="short-in" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${esc(q.placeholder || "Odpověď")}" style="flex:1;min-width:0"><button class="btn primary" type="submit">Zkontrolovat</button></form>
+      <p class="muted" style="font-size:.84rem">${esc(q.format || "Piš stručně, např. 3, -1/2, (1,0,2), ne existuje.")}</p>${hintsBlock()}${dontKnow()}`;
+    $("#sf").addEventListener("submit", ev => {
+      ev.preventDefault(); if (cur.answered) return;
+      const v = norm($("#short-in").value); if (!v) return;
+      const ok = (q.accept || [q.answer]).some(a => norm(a) === v);
+      cur.draft = $("#short-in").value;
+      $("#short-in").disabled = true;
+      finish(ok ? 2 : 0, { allowOverride: !ok });
+    });
+    bindHints();
+  } else {
+    const T = TYPES[q.type];
+    const ph = q.type === "def" ? "Napiš definici. Matematiku můžeš psát jako $A^{-1}$, $\\mathbb{R}^n$ nebo slovy." : q.type === "thm" ? "Zformuluj tvrzení přesně, se všemi předpoklady." : q.type === "proof" ? "Napiš důkaz. Klidně stručně, ale každý krok zdůvodni." : q.type === "calc" ? "Postup a výsledek." : "Tvoje úvaha a odpověď.";
+    box.innerHTML = `<textarea id="wr" placeholder="${esc(ph)}" aria-label="Tvoje odpověď"></textarea>
+      <div class="row"><button class="btn ghost" id="pv-btn" type="button">Náhled vzorců</button></div>
+      <div id="pv" class="preview prose" hidden></div>
+      ${T.heavy ? `<div class="photo-row"><label class="btn filelbl">Fotka řešení<input type="file" id="ph" accept="image/*"></label><span id="ph-info" class="muted" style="font-size:.85rem">Můžeš to napsat na papír a vyfotit.</span></div>` : ""}
+      ${hintsBlock()}
+      <div class="row">
+        ${state.sample ? `<button class="btn primary" id="ai-btn">Zkontrolovat s Claude</button>` : ""}
+        <button class="btn ${state.sample ? "" : "primary"}" id="show-btn">Ukázat vzorové řešení</button>
+        <button class="btn ghost" id="dk-btn">Nevím</button>
+      </div>
+      <div id="ai-out" class="stack"></div>`;
+    const ta = $("#wr");
+    const hd = window.claude && window.claude.hot && window.claude.hot.data;
+    if (hd && hd.qid === q.id && hd.draft) ta.value = hd.draft;
+    ta.addEventListener("input", () => { cur.draft = ta.value; });
+    $("#pv-btn").addEventListener("click", () => { const pv = $("#pv"); pv.hidden = !pv.hidden; if (!pv.hidden) { pv.innerHTML = md(ta.value || "…"); typeset(pv); } });
+    const ph2 = $("#ph");
+    if (ph2) ph2.addEventListener("change", () => { const f = ph2.files && ph2.files[0]; cur.photo = f || null; const info = $("#ph-info"); if (f) { const url = URL.createObjectURL(f); info.innerHTML = `<img src="${url}" alt="Fotka odpovědi">`; } });
+    $("#show-btn").addEventListener("click", () => revealWritten(null));
+    $("#dk-btn").addEventListener("click", () => { cur.dontKnow = true; revealWritten(null, 0); });
+    const ai = $("#ai-btn"); if (ai) ai.addEventListener("click", aiCheck);
+    bindHints();
+    return;
+  }
+  const dk = $("#dk", box); if (dk) dk.addEventListener("click", () => { if (cur.answered) return; box.querySelectorAll("button,input").forEach(x => x.disabled = true); finish(0); });
+}
+function dontKnow() { return `<div class="row"><button class="btn ghost" id="dk">Nevím</button></div>`; }
+function hintsBlock() { const h = cur.q.hints || []; if (!h.length) return ""; return `<div id="hints" class="stack"></div><div class="row"><button class="btn ghost" id="hint-btn" type="button">Nápověda (${h.length})</button></div>`; }
+function bindHints() {
+  const b = $("#hint-btn"); if (!b) return; const h = cur.q.hints || [];
+  b.addEventListener("click", () => {
+    if (cur.hints >= h.length) return; const div = document.createElement("div"); div.className = "hint prose"; div.innerHTML = md(h[cur.hints]); $("#hints").appendChild(div); typeset(div);
+    cur.hints++; b.textContent = cur.hints >= h.length ? "Další nápověda už není" : `Další nápověda (${h.length - cur.hints})`; if (cur.hints >= h.length) b.disabled = true;
+  });
+}
+
+let aiCtl = null;
+async function aiCheck() {
+  const q = cur.q; const T = TYPES[q.type]; const text = ($("#wr").value || "").trim();
+  if (!text && !cur.photo) { toast("Nejdřív napiš odpověď nebo přidej fotku."); return; }
+  const btn = $("#ai-btn"); btn.disabled = true; const out = $("#ai-out");
+  out.innerHTML = `<div class="ai"><span><span class="spinner"></span> Claude kontroluje odpověď… <button class="btn ghost" id="ai-stop" style="padding:3px 8px;font-size:.8rem">Zastavit</button></span></div>`;
+  aiCtl = new AbortController(); $("#ai-stop").addEventListener("click", () => aiCtl && aiCtl.abort());
+  const prompt = [
+    "Jsi zkoušející z předmětu Lineární algebra 1 na MFF UK (NMAG111, skripta L. Barto a J. Tůma). Hodnotíš odpověď studenta jako u písemné zkoušky: přísně na matematickou správnost a úplnost, ale férově.",
+    `Typ úlohy: ${T.label} (max. ${T.pts} bodů).`,
+    `Zadání: ${q.q}`,
+    q.model ? `Vzorové řešení (odpověď nemusí být doslovně stejná, uznej i jiný správný postup nebo ekvivalentní formulaci): ${q.model}` : "",
+    (q.check || []).length ? `Body, které musí správná odpověď obsahovat:\n- ${q.check.join("\n- ")}` : "",
+    "Zásady: u definic a formulací vyžaduj všechny předpoklady a kvantifikátory (chybějící podmínka = částečně nebo špatně). U důkazů hlídej, zda je každý krok zdůvodněný a zda se nedokazuje kruhem. Nepoužívej pojmy nad rámec kapitol 1–7 skript. Drobné nepřesnosti v zápisu nepenalizuj, pokud je myšlenka jasná a správná.",
+    cur.photo ? "Odpověď studenta je na přiložené fotografii (rukopis)." + (text ? " Student k ní připsal: <<<" + text + ">>>" : "") : `Odpověď studenta: <<<${text}>>>`,
+    `Odpověz POUZE jedním JSON objektem: {"verdikt": "spravne" | "castecne" | "spatne", "body": číslo 0–${T.pts}, "dobre": [krátké body, co je správně], "chybi": [co chybí], "chyby": [konkrétní chyby], "komentar": "2–4 věty česky, konkrétně a věcně"}. Matematiku piš v LaTeXu mezi znaky $.`
+  ].filter(Boolean).join("\n\n");
+  try {
+    const opts = { modelTier: "default", signal: aiCtl.signal };
+    if (cur.photo) opts.images = [cur.photo];
+    const r = await state.sample.json(prompt, opts);
+    if (!r || typeof r !== "object") throw { code: "invalid_json" };
+    const g = r.verdikt === "spravne" ? 2 : r.verdikt === "castecne" ? 1 : 0;
+    cur.ai = { g, body: Number(r.body), dobre: r.dobre || [], chybi: r.chybi || [], chyby: r.chyby || [], komentar: r.komentar || "" };
+    revealWritten(cur.ai);
+  } catch (e) {
+    const code = e && e.code;
+    const msg = code === "cancelled" ? "Kontrola zastavena." : code === "not_granted" || code === "sampling_disabled" ? "Kontrola přes Claude není dostupná. Porovnej odpověď se vzorovým řešením sám." : code === "rate_limited" ? "Příliš mnoho dotazů na Claude. Zkus to později, nebo porovnej odpověď se vzorovým řešením." : code === "images_unavailable" || code === "image_rejected" ? "Fotku se nepodařilo odeslat. Zkus jinou fotku, nebo odpověď napiš." : "Hodnocení se nepodařilo získat. Zkus to znovu, nebo porovnej odpověď se vzorovým řešením.";
+    out.innerHTML = `<p class="muted">${esc(msg)}</p>`; btn.disabled = false;
+    if (code === "not_granted" || code === "sampling_disabled") { btn.remove(); state.sample = null; }
+  }
+}
+function revealWritten(ai, forced) {
+  if (cur.revealed) return; cur.revealed = true;
+  const q = cur.q;
+  $("#ans").querySelectorAll("button, textarea, input").forEach(x => { if (x.id !== "pv-btn") x.disabled = true; });
+  $("#ai-out").innerHTML = "";
+  const fb = $("#fb");
+  const suggest = forced === 0 ? 0 : ai ? ai.g : null;
+  const checks = (q.check || []).map((c, i) => `<label><input type="checkbox" data-ci="${i}"><span class="prose">${inline(c)}</span></label>`).join("");
+  fb.innerHTML = `
+    ${ai ? `<div class="ai"><span class="verdict" style="color:var(--${["bad", "part", "ok"][ai.g]})">Claude: ${["špatně", "částečně", "správně"][ai.g]}${isFinite(ai.body) ? ` · ${ai.body}/${TYPES[q.type].pts} b.` : ""}</span>
+      ${ai.komentar ? `<div class="prose">${md(ai.komentar)}</div>` : ""}
+      ${ai.chyby.length ? `<div><span class="eyebrow">Chyby</span><ul>${ai.chyby.map(x => `<li>${inline(x)}</li>`).join("")}</ul></div>` : ""}
+      ${ai.chybi.length ? `<div><span class="eyebrow">Chybí</span><ul>${ai.chybi.map(x => `<li>${inline(x)}</li>`).join("")}</ul></div>` : ""}</div>` : ""}
+    <div class="feedback"><div class="model"><div class="eyebrow lbl">Vzorové řešení</div><div class="prose">${md(q.model || "")}</div></div>
+      ${q.why ? `<div class="prose muted">${md(q.why)}</div>` : ""}
+      ${checks && !ai ? `<div class="stack"><span class="eyebrow">Co tvoje odpověď obsahovala?</span><div class="checklist">${checks}</div></div>` : ""}
+    </div>
+    <div class="stack" id="grade-stack"><span class="eyebrow">Ohodnoť se</span>
+      <div class="gradebar"><button class="btn bad" data-g="0">Nevěděl</button><button class="btn part" data-g="1">Částečně</button><button class="btn ok" data-g="2">Věděl</button></div></div>`;
+  const pick = g => fb.querySelectorAll(".gradebar .btn").forEach(b => b.classList.toggle("sel", Number(b.dataset.g) === g));
+  if (suggest !== null) pick(suggest);
+  fb.querySelectorAll(".checklist input").forEach(cb => cb.addEventListener("change", () => {
+    const all = fb.querySelectorAll(".checklist input"); const n = [...all].filter(x => x.checked).length;
+    pick(n === all.length ? 2 : n >= Math.ceil(all.length / 2) ? 1 : 0);
+  }));
+  fb.querySelectorAll(".gradebar .btn").forEach(b => b.addEventListener("click", () => { pick(Number(b.dataset.g)); $("#grade-stack").remove(); finish(Number(b.dataset.g), { written: true }); }));
+  typeset(fb);
+}
+
+function finish(g, opts = {}) {
+  if (cur.answered) return; cur.answered = true; cur.g = g;
+  const q = cur.q; const s = state.session; const it = cur.it;
+  const fb = $("#fb");
+  const showModel = !opts.written && (q.model || q.type === "short");
+  const block = document.createElement("div");
+  block.className = "feedback g" + g;
+  block.innerHTML = `<span class="verdict">${["Špatně", "Částečně", "Správně"][g]}${q.type === "short" && g < 2 ? ` · správně: <span class="mono">${esc(q.answer || (q.accept || [])[0] || "")}</span>` : ""}</span>
+    ${!opts.written && q.why ? `<div class="prose">${md(q.why)}</div>` : ""}
+    ${showModel && q.model ? `<div class="model"><div class="eyebrow lbl">Řešení</div><div class="prose">${md(q.model)}</div></div>` : ""}
+    ${g < 2 ? refLink(q, false) : refLink(q, true)}
+    ${opts.allowOverride ? `<div class="row"><button class="btn ghost" id="ovr">Moje odpověď je taky správně (jiný zápis)</button></div>` : ""}
+    <div class="nav-row"><span></span><button class="btn primary" id="next">${s.idx + 1 >= s.plan.length ? "Dokončit" : "Další"}</button></div>`;
+  fb.appendChild(block);
+  typeset(block);
+  record(q, g, it);
+  const ovr = $("#ovr", block); if (ovr) ovr.addEventListener("click", () => { ovr.remove(); block.className = "feedback g2"; block.querySelector(".verdict").textContent = "Uznáno jako správně"; record(q, 2, it, true); });
+  $("#next", block).addEventListener("click", nextQ);
+  $("#next", block).focus({ preventScroll: true });
+  block.scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+function record(q, g, it, override) {
+  const s = state.session;
+  if (it.again) { return; }
+  if (!override) { cur.prevP = state.P[q.id]; cur.prevSet = true; }
+  const prev = cur.prevSet ? cur.prevP : state.P[q.id];
+  const sc = schedule(prev, g);
+  const base = prev ? Object.assign({}, prev) : { n: 0, ok: 0, part: 0, bad: 0, h: "" };
+  base.n = (base.n || 0) + 1; if (g === 2) base.ok = (base.ok || 0) + 1; else if (g === 1) base.part = (base.part || 0) + 1; else base.bad = (base.bad || 0) + 1;
+  base.h = ((base.h || "") + g).slice(-10); base.box = sc.box; base.due = sc.due; base.g = g; base.last = today(); base.ts = Date.now(); base.sec = q.sec; base.type = q.type;
+  if (cur.hints) base.hints = (base.hints || 0) + cur.hints;
+  state.P[q.id] = base;
+  if (state.db) queueWrite("progress/" + q.id, () => state.db.doc("progress/" + q.id).set(base));
+  s.res[q.id] = g;
+  // wrong or partial light question: ask again at end of this session
+  if (!override && g < 2 && TYPES[q.type].light && !s.plan.some((x, i) => i > s.idx && x.id === q.id)) s.plan.push({ id: q.id, again: true });
+  if (override) { const k = s.plan.findIndex((x, i) => i > s.idx && x.id === q.id && x.again); if (k > -1) s.plan.splice(k, 1); }
+  if (s.kind === "daily" && state.log) { state.log.res = s.res; state.log.plan = s.plan; state.log.answered = Object.keys(s.res).length; }
+  else { const l = state.log && state.log.date === today() ? state.log : (state.log = { date: today(), mode: "daily", plan: null, idx: 0, res: {}, done: false, answered: 0 }); l.extraN = (l.extraN || 0) + (override ? 0 : 1); }
+}
+function nextQ() {
+  const s = state.session; s.idx++;
+  if (s.kind === "daily" && state.log) state.log.idx = s.idx;
+  saveLog();
+  window.scrollTo({ top: 0 });
+  renderQuestion();
+}
+function renderSessionEnd() {
+  const s = state.session; const el = $("#view");
+  const res = Object.entries(s.res); const ok = res.filter(([, g]) => g === 2).length, pt = res.filter(([, g]) => g === 1).length, bad = res.filter(([, g]) => g === 0).length;
+  const wrongQs = res.filter(([, g]) => g < 2).map(([id]) => state.Q.get(id)).filter(Boolean);
+  const refs = {}; wrongQs.forEach(q => { const k = (q.ref && q.ref.s) || q.sec; (refs[k] = refs[k] || { q, n: 0 }).n++; });
+  const daily = s.kind === "daily";
+  if (daily && state.log) { state.log.done = true; state.log.t1 = Date.now(); saveLog(); loadLogs(); }
+  el.innerHTML = `<section class="panel done-card"><span class="eyebrow">${esc(daily ? "Denní sezení" : modeName(s.mode))}</span>
+      <h1>${bad + pt === 0 ? "Všechno správně" : "Hotovo"}</h1>
+      <div class="tally"><span><b class="mono" style="color:var(--ok)">${ok}</b>správně</span><span><b class="mono" style="color:var(--part)">${pt}</b>částečně</span><span><b class="mono" style="color:var(--bad)">${bad}</b>špatně</span></div>
+      ${Object.keys(refs).length ? `<div class="stack"><span class="eyebrow">Dnes si přečti znovu</span>${Object.entries(refs).sort((a, b) => secCmp(a[0], b[0])).map(([, x]) => refLink(x.q, false)).join("")}</div>` : `<p class="muted">Bez chyb. Tyhle otázky se vrátí za pár dní.</p>`}
+      <div class="row"><button class="btn primary" id="end-home">Zpět na začátek</button><button class="btn" data-act="extra" data-mode="weak">Slabá místa</button></div></section>`;
+  state.session = null;
+  $("#end-home").addEventListener("click", () => render());
+  bindView(el); typeset(el);
+}
+
+/* keep an unsent draft across live updates of this page */
+if (window.claude && window.claude.hot && window.claude.hot.snapshot) {
+  try { window.claude.hot.snapshot(() => ({ qid: cur && cur.q && cur.q.id, draft: cur && cur.draft })); } catch (e) {}
+}
+</script>
+
+</body>
+</html>

@@ -248,6 +248,8 @@ section:nth-of-type(4) { animation-delay: .45s; }
 .rev-name { font-weight: 600; }
 .rev-date { font-family: var(--f-mono); font-size: 13px; color: var(--muted); }
 section:nth-of-type(5) { animation-delay: .55s; }
+section:nth-of-type(6) { animation-delay: .6s; }
+.proj-meta { font-family: var(--f-mono); font-size: 13px; color: var(--muted); margin: 0; }
 @media (max-width: 600px) { .reviews { grid-template-columns: 1fr; } }
 
 /* ---------- Sticky bar (appears after scrolling past the hero) ---------- */
@@ -264,7 +266,7 @@ section:nth-of-type(5) { animation-delay: .55s; }
 }
 .stickybar.show { transform: none; }
 .sb-inner {
-  max-width: 760px; margin: 0 auto;
+  max-width: 1040px; margin: 0 auto;
   padding-left: max(16px, env(safe-area-inset-left, 0px));
   padding-right: max(16px, env(safe-area-inset-right, 0px));
   padding-block: 10px;
@@ -294,7 +296,7 @@ section:nth-of-type(5) { animation-delay: .55s; }
 .sb-cta:hover { transform: translateY(-1px); box-shadow: 0 8px 18px -8px var(--accent); }
 .sb-progress { height: 2px; background: var(--accent); transform-origin: left; transform: scaleX(0); }
 section { scroll-margin-top: 80px; }
-@media (max-width: 900px) {
+@media (max-width: 960px) {
   .sb-nav { display: none; }
   .sb-cta { margin-left: auto; }
 }
@@ -310,7 +312,7 @@ section { scroll-margin-top: 80px; }
 section:nth-of-type(1) { animation-delay: .15s; }
 section:nth-of-type(2) { animation-delay: .25s; }
 section:nth-of-type(3) { animation-delay: .35s; }
-footer { animation-delay: .65s; }
+footer { animation-delay: .7s; }
 
 /* Name: accent underline draws in */
 h1 { position: relative; display: inline-block; }
@@ -387,6 +389,7 @@ section:hover h2::after { background: var(--accent); }
       <a href="#about" data-scroll="about" data-i18n="aboutTitle">Про мене</a>
       <a href="#achievements" data-scroll="achievements" data-i18n="achTitle">Досягнення</a>
       <a href="#now" data-scroll="now" data-i18n="nowTitle">Чим займаюся</a>
+      <a href="#projects" data-scroll="projects" data-i18n="projTitle">Проєкти</a>
       <a href="#reviews" data-scroll="reviews" data-i18n="navReviews">Відгуки</a>
       <a href="#links" data-scroll="links" data-i18n="navLinks">Контакти</a>
     </div>
@@ -460,6 +463,19 @@ section:hover h2::after { background: var(--accent); }
       </div>
       <p data-i18n="czText">Я сам пройшов мовні курси й навчаюся в Карловому університеті, тому можу підказати щодо вступу, вивчення чеської та студентського життя в Празі.</p>
       <a href="https://t.me/pelehatiiy" target="_blank" rel="noopener"><span data-i18n="czLink">Написати в Telegram</span> <span class="arrow" aria-hidden="true">→</span></a>
+    </article>
+  </section>
+
+  <section aria-labelledby="projects">
+    <h2 id="projects" data-i18n="projTitle">Проєкти</h2>
+    <article class="project">
+      <div class="project-head">
+        <h3>Ranní lineárka</h3>
+        <span class="tag" data-i18n="linTag">веб-застосунок</span>
+      </div>
+      <p data-i18n="linText">Щоденний тренажер з лінійної алгебри для курсу NMAG111 на МФФ Карлового університету. Питання як на іспиті: так/ні, визначення, формулювання теорем, доведення й задачі. Повторення за інтервалами, а після помилки — посилання на потрібну сторінку скрипт. Інтерфейс і питання чеською.</p>
+      <p class="proj-meta" data-i18n="linMeta">186 питань · 8 типів завдань · розділи 1⁠–⁠5</p>
+      <a href="linearka/"><span data-i18n="linLink">Відкрити тренажер</span> <span class="arrow" aria-hidden="true">→</span></a>
     </article>
   </section>
 
@@ -544,7 +560,12 @@ const T = {
     navReviews: "Відгуки",
     sbSub: "студент · математика",
     navLinks: "Контакти",
-    ctaPreply: "Записатися"
+    ctaPreply: "Записатися",
+    projTitle: "Проєкти",
+    linTag: "веб-застосунок",
+    linText: "Щоденний тренажер з лінійної алгебри для курсу NMAG111 на МФФ Карлового університету. Питання як на іспиті: так/ні, визначення, формулювання теорем, доведення й задачі. Повторення за інтервалами, а після помилки — посилання на потрібну сторінку скрипт. Інтерфейс і питання чеською.",
+    linMeta: "186 питань · 8 типів завдань · розділи 1⁠–⁠5",
+    linLink: "Відкрити тренажер"
   },
   cs: {
     title: "Yurii Tsipino",
@@ -589,7 +610,12 @@ const T = {
     navReviews: "Recenze",
     sbSub: "student · matematika",
     navLinks: "Kontakty",
-    ctaPreply: "Objednat lekci"
+    ctaPreply: "Objednat lekci",
+    projTitle: "Projekty",
+    linTag: "webová aplikace",
+    linText: "Denní trenažér lineární algebry k předmětu NMAG111 na MFF UK. Otázky jako u zkoušky: ano/ne, definice, formulace vět, důkazy a úlohy. Opakování v intervalech a po chybě odkaz na správnou stranu skript.",
+    linMeta: "186 otázek · 8 typů úloh · kapitoly 1⁠–⁠5",
+    linLink: "Otevřít trenažér"
   },
   en: {
     title: "Yurii Tsipino",
@@ -634,7 +660,12 @@ const T = {
     navReviews: "Reviews",
     sbSub: "student · math",
     navLinks: "Contacts",
-    ctaPreply: "Book a lesson"
+    ctaPreply: "Book a lesson",
+    projTitle: "Projects",
+    linTag: "web app",
+    linText: "A daily linear algebra trainer for the NMAG111 course at Charles University in Prague. Exam-style questions: yes/no, definitions, theorem statements, proofs and problems. Spaced repetition, and after a mistake a link to the right page of the lecture notes. In Czech.",
+    linMeta: "186 questions · 8 task types · chapters 1⁠–⁠5",
+    linLink: "Open the trainer"
   }
 };
 
